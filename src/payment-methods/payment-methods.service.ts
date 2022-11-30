@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AddPaymentMethodBody, PaymentsMethodsDTO } from 'src/payments.dto';
+import { PaymentsMethodsDTO } from 'src/payments.dto';
 import { AddPaymentMethodData } from 'src/payments.interface';
 import { Repository } from 'typeorm';
 import { PaymentMethods } from './payment-methods.entity';
@@ -28,5 +28,13 @@ export class PaymentMethodsService {
     );
 
     return PaymentsMethodsDTO.toDTO(paymentMethod);
+  }
+
+  async deletePaymentMethod(id: number): Promise<string> {
+    const paymentMethod = await this.paymentsRepository.findOneByOrFail({ id });
+
+    await this.paymentsRepository.remove(paymentMethod);
+
+    return 'Payment method deleted';
   }
 }
