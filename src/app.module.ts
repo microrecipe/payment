@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Payment } from './payment.entity';
+import { PaymentMethodsController } from './payment-methods/payment-methods.controller';
+import { PaymentMethods } from './payment-methods/payment-methods.entity';
+import { PaymentMethodsService } from './payment-methods/payment-methods.service';
 
 @Module({
   imports: [
@@ -19,16 +19,16 @@ import { Payment } from './payment.entity';
         username: configService.get('PAYMENT_DB_USERNAME'),
         password: configService.get('PAYMENT_DB_PASSWORD'),
         database: configService.get('PAYMENT_DB_NAME'),
-        entities: [__dirname + './*.entity{.ts,.js}'],
+        entities: [__dirname + './**/*.entity{.ts,.js}'],
         autoLoadEntities: true,
         synchronize: true,
         logging: false,
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Payment]),
+    TypeOrmModule.forFeature([PaymentMethods]),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [PaymentMethodsController],
+  providers: [PaymentMethodsService],
 })
 export class AppModule {}
