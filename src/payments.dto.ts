@@ -1,4 +1,6 @@
+import { IsString } from 'class-validator';
 import { PaymentMethods } from './payment-methods/payment-methods.entity';
+import { AddPaymentMethodData } from './payments.interface';
 
 export class PaymentsMethodsDTO {
   static toDTO(paymentMethods: PaymentMethods) {
@@ -11,5 +13,10 @@ export class PaymentsMethodsDTO {
   }
 
   id: number;
+  name: string;
+}
+
+export class AddPaymentMethodBody implements AddPaymentMethodData {
+  @IsString()
   name: string;
 }

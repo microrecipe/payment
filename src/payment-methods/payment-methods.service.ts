@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaymentsMethodsDTO } from 'src/payments.dto';
+import { AddPaymentMethodBody, PaymentsMethodsDTO } from 'src/payments.dto';
+import { AddPaymentMethodData } from 'src/payments.interface';
 import { Repository } from 'typeorm';
 import { PaymentMethods } from './payment-methods.entity';
 
@@ -15,5 +16,17 @@ export class PaymentMethodsService {
     const payments = await this.paymentsRepository.find();
 
     return payments.map((payment) => PaymentsMethodsDTO.toDTO(payment));
+  }
+
+  async addPaymentMethod(
+    data: AddPaymentMethodData,
+  ): Promise<PaymentsMethodsDTO> {
+    const paymentMethod = await this.paymentsRepository.save(
+      this.paymentsRepository.create({
+        name: data.name,
+      }),
+    );
+
+    return PaymentsMethodsDTO.toDTO(paymentMethod);
   }
 }
