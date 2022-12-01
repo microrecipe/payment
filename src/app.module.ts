@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtStrategy } from './jwt.strategy';
 import { PaymentMethodsController } from './payment-methods/payment-methods.controller';
 import { PaymentMethods } from './payment-methods/payment-methods.entity';
 import { PaymentMethodsService } from './payment-methods/payment-methods.service';
@@ -29,6 +30,6 @@ import { PaymentMethodsService } from './payment-methods/payment-methods.service
     TypeOrmModule.forFeature([PaymentMethods]),
   ],
   controllers: [PaymentMethodsController],
-  providers: [PaymentMethodsService],
+  providers: [PaymentMethodsService, JwtStrategy],
 })
 export class AppModule {}
