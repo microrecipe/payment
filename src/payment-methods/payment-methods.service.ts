@@ -13,9 +13,9 @@ export class PaymentMethodsService {
   ) {}
 
   async listPaymentMethods(): Promise<PaymentsMethodsDTO[]> {
-    const payments = await this.paymentsRepository.find();
+    const paymentMethods = await this.paymentsRepository.find();
 
-    return payments.map((payment) => PaymentsMethodsDTO.toDTO(payment));
+    return paymentMethods.map((payment) => PaymentsMethodsDTO.toDTO(payment));
   }
 
   async addPaymentMethod(
