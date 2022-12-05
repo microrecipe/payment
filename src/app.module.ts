@@ -1,16 +1,33 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PaymentMethod } from './entities/payment-method.entity';
+import { Payment } from './entities/payment.entity';
 import { JwtStrategy } from './jwt.strategy';
 import { PaymentMethodsController } from './payment-methods/payment-methods.controller';
-import { PaymentMethods } from './payment-methods/payment-methods.entity';
 import { PaymentMethodsService } from './payment-methods/payment-methods.service';
+import { ClientPackageNames } from './payments.enum';
+import { PaymentsController } from './payments/payments.controller';
+import { PaymentsService } from './payments/payments.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ClientsModule.register([
+      {
+        name: ClientPackageNames.paymentPaidTopic,
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'microrecipe',
+            brokers: process.env.KAFKA_BROKERS.split(','),
+          },
+        },
+      },
+    ]),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -27,9 +44,9 @@ import { PaymentMethodsService } from './payment-methods/payment-methods.service
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([PaymentMethods]),
+    TypeOrmModule.forFeature([PaymentMethod, Payment]),
   ],
-  controllers: [PaymentMethodsController],
-  providers: [PaymentMethodsService, JwtStrategy],
+  controllers: [PaymentMethodsController, PaymentsController],
+  providers: [PaymentMethodsService, JwtStrategy, PaymentsService],
 })
 export class AppModule {}

@@ -1,5 +1,7 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { KafkaOptions } from '@nestjs/microservices';
+import { Transport } from '@nestjs/microservices/enums';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -12,6 +14,21 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  app.connectMicroservice<KafkaOptions>({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        clientId: 'microrecipe',
+        brokers: process.env.KAFKA_BROKERS.split(','),
+      },
+      consumer: {
+        groupId: 'payment',
+      },
+    },
+  });
+
+  await app.startAllMicroservices();
 
   const restPort = process.env.PAYMENT_REST_PORT || 80;
 

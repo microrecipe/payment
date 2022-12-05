@@ -1,9 +1,9 @@
 import { IsString } from 'class-validator';
-import { PaymentMethods } from './payment-methods/payment-methods.entity';
+import { PaymentMethod } from './entities/payment-method.entity';
 import { AddPaymentMethodData } from './payments.interface';
 
 export class PaymentsMethodsDTO {
-  static toDTO(paymentMethods: PaymentMethods) {
+  static toDTO(paymentMethods: PaymentMethod) {
     const res = new PaymentsMethodsDTO();
 
     res.id = paymentMethods.id;

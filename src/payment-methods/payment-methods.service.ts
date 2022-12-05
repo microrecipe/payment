@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaymentMethod } from 'src/entities/payment-method.entity';
 import { PaymentsMethodsDTO } from 'src/payments.dto';
 import { AddPaymentMethodData } from 'src/payments.interface';
 import { Repository } from 'typeorm';
-import { PaymentMethods } from './payment-methods.entity';
 
 @Injectable()
 export class PaymentMethodsService {
   constructor(
-    @InjectRepository(PaymentMethods)
-    private readonly paymentsRepository: Repository<PaymentMethods>,
+    @InjectRepository(PaymentMethod)
+    private readonly paymentsRepository: Repository<PaymentMethod>,
   ) {}
 
   async listPaymentMethods(): Promise<PaymentsMethodsDTO[]> {
