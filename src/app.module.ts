@@ -6,6 +6,8 @@ import { PaymentMethod } from './entities/payment-method.entity';
 import { Payment } from './entities/payment.entity';
 import { JwtStrategy } from './jwt.strategy';
 import { PaymentMethodsController } from './payment-methods/payment-methods.controller';
+import { PaymentMethodsGrpcController } from './payment-methods/payment-methods.grpc.controller';
+import { PaymentMethodsGrpcService } from './payment-methods/payment-methods.grpc.service';
 import { PaymentMethodsService } from './payment-methods/payment-methods.service';
 import { ClientPackageNames } from './payments.enum';
 import { PaymentsController } from './payments/payments.controller';
@@ -46,7 +48,16 @@ import { PaymentsService } from './payments/payments.service';
     }),
     TypeOrmModule.forFeature([PaymentMethod, Payment]),
   ],
-  controllers: [PaymentMethodsController, PaymentsController],
-  providers: [PaymentMethodsService, JwtStrategy, PaymentsService],
+  controllers: [
+    PaymentMethodsController,
+    PaymentsController,
+    PaymentMethodsGrpcController,
+  ],
+  providers: [
+    PaymentMethodsService,
+    JwtStrategy,
+    PaymentsService,
+    PaymentMethodsGrpcService,
+  ],
 })
 export class AppModule {}

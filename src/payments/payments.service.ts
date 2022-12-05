@@ -44,7 +44,7 @@ export class PaymentsService {
 
   async handleOrderPlaced(data: OrderPlacedPayload): Promise<void> {
     const paymentMethod = await this.paymentMethodRepository.findOneByOrFail({
-      id: data.paymentId,
+      id: data.paymentMethod.id,
     });
 
     const payment = await this.paymentsRepository.save(

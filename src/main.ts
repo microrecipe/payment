@@ -1,7 +1,8 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { KafkaOptions } from '@nestjs/microservices';
+import { GrpcOptions, KafkaOptions } from '@nestjs/microservices';
 import { Transport } from '@nestjs/microservices/enums';
+import { join } from 'path';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -14,6 +15,15 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
+  app.connectMicroservice<GrpcOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: 'payments',
+      protoPath: join(__dirname, '../src/proto/payments.proto'),
+      url: `0.0.0.0:${process.env.PAYMENT_GRPC_PORT}`,
+    },
+  });
 
   app.connectMicroservice<KafkaOptions>({
     transport: Transport.KAFKA,
@@ -29,6 +39,8 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
+
+  logger.log(`gRPC service running on port: ${process.env.PAYMENT_GRPC_PORT}`);
 
   const restPort = process.env.PAYMENT_REST_PORT || 80;
 
