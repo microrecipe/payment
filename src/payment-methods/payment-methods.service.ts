@@ -33,7 +33,7 @@ export class PaymentMethodsService {
   async deletePaymentMethod(id: number): Promise<string> {
     const paymentMethod = await this.paymentsRepository.findOneByOrFail({ id });
 
-    await this.paymentsRepository.remove(paymentMethod);
+    await this.paymentsRepository.softRemove(paymentMethod);
 
     return 'Payment method deleted';
   }
