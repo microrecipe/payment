@@ -62,7 +62,7 @@ export class PaymentsService {
 
     setTimeout(() => {
       this.simulateSuccessfulPayment(payment.id, data);
-    }, 5000);
+    }, 10000);
 
     return;
   }
